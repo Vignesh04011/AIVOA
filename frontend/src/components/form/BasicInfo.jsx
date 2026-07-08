@@ -1,33 +1,40 @@
 import Input from "../common/Input";
 import Select from "../common/Select";
+import interactionTypes from "../../constants/interactionTypes";
 
 export default function BasicInfo() {
   return (
-    <div className="grid grid-cols-2 gap-5">
+    <div className="space-y-5">
 
-      <Input
-        label="HCP Name"
-        placeholder="Search or select HCP..."
-      />
+      {/* Row 1 */}
+      <div className="grid grid-cols-2 gap-5">
 
-      <Select
-        label="Interaction Type"
-        options={[
-          "Meeting",
-          "Call",
-          "Email",
-        ]}
-      />
+        <Input
+          label="HCP Name"
+          placeholder="Search or select HCP..."
+        />
 
-      <Input
-        label="Date"
-        type="date"
-      />
+        <Select
+          label="Interaction Type"
+          options={interactionTypes}
+        />
 
-      <Input
-        label="Time"
-        type="time"
-      />
+      </div>
+
+      {/* Row 2 */}
+      <div className="grid grid-cols-2 gap-5">
+
+        <Input
+          label="Date"
+          type="date"
+        />
+
+        <Input
+          label="Time"
+          type="time"
+        />
+
+      </div>
 
     </div>
   );

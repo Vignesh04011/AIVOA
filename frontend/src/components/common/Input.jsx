@@ -1,6 +1,6 @@
 export default function Input({
   label,
-  placeholder,
+  placeholder = "",
   type = "text",
 }) {
   return (
@@ -13,8 +13,9 @@ export default function Input({
         type={type}
         placeholder={placeholder}
         className="
-          h-11
-          rounded-lg
+          h-10
+          w-full
+          rounded-md
           border
           border-slate-300
           bg-white

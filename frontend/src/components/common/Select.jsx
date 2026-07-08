@@ -10,21 +10,25 @@ export default function Select({
 
       <select
         className="
-          h-11
-          rounded-lg
+          h-10
+          w-full
+          rounded-md
           border
           border-slate-300
           bg-white
           px-3
           text-sm
           outline-none
+          transition
           focus:border-blue-500
           focus:ring-2
           focus:ring-blue-200
         "
       >
-        {options.map((item) => (
-          <option key={item}>{item}</option>
+        {options.map((option) => (
+          <option key={option}>
+            {option}
+          </option>
         ))}
       </select>
     </div>

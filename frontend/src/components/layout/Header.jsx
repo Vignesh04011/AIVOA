@@ -1,9 +1,9 @@
 export default function Header() {
   return (
-    <div className="mb-6">
+    <header className="mb-8">
       <h1 className="text-3xl font-bold text-slate-800">
         Log HCP Interaction
       </h1>
-    </div>
+    </header>
   );
 }

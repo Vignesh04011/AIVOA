@@ -1,19 +1,32 @@
 import Card from "../common/Card";
+
 import BasicInfo from "./BasicInfo";
 import DiscussionSection from "./DiscussionSection";
+import MaterialsSection from "./MaterialsSection";
+import SentimentSection from "./SentimentSection";
+import OutcomeSection from "./OutcomeSection";
+import FollowupSection from "./FollowupSection";
 
 export default function InteractionForm() {
   return (
-    <Card>
-      <div className="p-6">
-        <h2 className="mb-6 text-xl font-semibold">
-          Interaction Details
-        </h2>
+    <Card className="space-y-8">
 
-        <BasicInfo />
+      <h2 className="text-xl font-semibold text-slate-800">
+        Interaction Details
+      </h2>
 
-        <DiscussionSection />
-      </div>
+      <BasicInfo />
+
+      <DiscussionSection />
+
+      <MaterialsSection />
+
+      <SentimentSection />
+
+      <OutcomeSection />
+
+      <FollowupSection />
+
     </Card>
   );
 }
