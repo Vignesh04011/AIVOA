@@ -1,11 +1,5 @@
-function App() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-100">
-      <h1 className="text-5xl font-bold text-slate-700">
-        AIVOA 🚀
-      </h1>
-    </div>
-  );
-}
+import InteractionPage from "./pages/InteractionPage";
 
-export default App;
+export default function App() {
+  return <InteractionPage />;
+}
