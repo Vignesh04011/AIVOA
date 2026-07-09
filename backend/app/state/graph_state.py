@@ -2,7 +2,7 @@ from typing import TypedDict
 
 
 class GraphState(TypedDict):
-    interaction: dict
+    interaction: dict | str
 
     summary: str
 

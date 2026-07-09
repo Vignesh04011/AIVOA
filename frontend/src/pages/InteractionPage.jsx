@@ -5,6 +5,8 @@ import MainLayout from "../components/layout/MainLayout";
 
 import InteractionForm from "../components/form/InteractionForm";
 import AssistantPanel from "../components/assistant/AssistantPanel";
+import { createInteraction } from "../services/interactionService";
+import { parseInteraction } from "../services/aiService";
 
 export default function InteractionPage() {
 
@@ -21,6 +23,65 @@ export default function InteractionPage() {
     follow_up_actions: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
+const handleAutoFill = async (text) => {
+
+  try {
+
+    setLoading(true);
+
+    const data = await parseInteraction(text);
+
+    setFormData(data.form_data);
+
+    setAiResponse({
+      summary: data.summary,
+      medical_insights: data.medical_insights,
+      recommendations: data.recommendations,
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+  } finally {
+
+    setLoading(false);
+
+  }
+
+};
+
+const handleSubmit = async () => {
+  console.log("FORM DATA:", formData);
+
+  try {
+    setLoading(true);
+
+    const response = await createInteraction(formData);
+
+    console.log(response);
+
+    setAiResponse(response.ai_response);
+
+    alert("Interaction Logged Successfully!");
+
+  } catch (err) {
+
+    console.log("ERROR RESPONSE:", err.response);
+
+    console.log("ERROR DATA:", err.response?.data);
+
+    console.error(err);
+
+  } finally {
+
+    setLoading(false);
+
+  }
+};
+
   const [aiResponse, setAiResponse] = useState(null);
 
   return (
@@ -32,15 +93,19 @@ export default function InteractionPage() {
         <MainLayout
           left={
             <InteractionForm
-              formData={formData}
-              setFormData={setFormData}
-              setAiResponse={setAiResponse}
-            />
+    formData={formData}
+    setFormData={setFormData}
+    setAiResponse={setAiResponse}
+    onSubmit={handleSubmit}
+    loading={loading}
+/>
           }
           right={
             <AssistantPanel
-              aiResponse={aiResponse}
-            />
+    aiResponse={aiResponse}
+    loading={loading}
+    onAutoFill={handleAutoFill}
+/>
           }
         />
 

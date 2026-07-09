@@ -6,11 +6,14 @@ import MaterialsSection from "./MaterialsSection";
 import SentimentSection from "./SentimentSection";
 import OutcomeSection from "./OutcomeSection";
 import FollowupSection from "./FollowupSection";
+import Button from "../common/Button";
 
 export default function InteractionForm({
     formData,
     setFormData,
     setAiResponse,
+    onSubmit,
+    loading,
 }) {
   return (
     <Card className="space-y-8">
@@ -48,6 +51,15 @@ export default function InteractionForm({
   formData={formData}
   setFormData={setFormData}
 />
+
+<div className="flex justify-end pt-4">
+    <Button
+        className="bg-blue-600 text-white hover:bg-blue-700"
+        onClick={onSubmit}
+    >
+        {loading ? "Generating..." : "Log Interaction"}
+    </Button>
+</div>
 
     </Card>
   );

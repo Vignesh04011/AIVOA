@@ -12,7 +12,7 @@ Generate follow-up recommendations.
 """
 
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="gemma2-9b-it",
         messages=[
             {
                 "role": "user",

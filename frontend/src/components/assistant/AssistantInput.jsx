@@ -1,33 +1,33 @@
+import { useState } from "react";
 import Button from "../common/Button";
 
-export default function AssistantInput() {
+export default function AssistantInput({
+  onAutoFill,
+}) {
+
+  const [text, setText] = useState("");
+
   return (
+
     <div className="border-t border-slate-200 pt-4">
 
-      <div className="flex gap-3">
+      <textarea
+        rows={5}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Describe your interaction with the HCP..."
+        className="w-full rounded-md border p-3 text-sm"
+      />
 
-        <input
-          type="text"
-          placeholder="Describe interaction..."
-          className="
-            flex-1
-            rounded-md
-            border
-            border-slate-300
-            px-3
-            py-2
-            text-sm
-            outline-none
-            focus:border-blue-500
-          "
-        />
-
-        <Button>
-          Log
-        </Button>
-
-      </div>
+      <Button
+        className="mt-3 bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
+        onClick={() => onAutoFill(text)}
+      >
+        ✨ Auto Fill Form
+      </Button>
 
     </div>
+
   );
+
 }
