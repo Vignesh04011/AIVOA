@@ -1,6 +1,7 @@
-from app.config.groq_client import client
 import json
 import re
+
+from app.config.groq_client import client
 
 
 def edit_agent(state):
@@ -21,18 +22,18 @@ User Request
 
 {user_message}
 
+Your job is to update ONLY what the user requested.
+
 Rules:
 
-- Understand natural language.
-- Modify ONLY the requested fields.
-- Preserve every other field exactly.
-- Never remove unrelated data.
-- If the user says remove/delete, replace that field with an empty string.
-- If the user changes time/date, update only that field.
-- If the user changes doctor name, update only hcp_name.
-- If the user adds another discussion topic, append it naturally.
-- Return ONLY valid JSON.
+- Preserve every existing field unless the user explicitly changes it.
+- Never remove unrelated information.
+- If the user says remove/delete/clear, return an empty string for ONLY that field.
+- If the user changes the doctor name, update ONLY hcp_name.
+- If the user changes date/time, update ONLY those fields.
+- If the user adds discussion topics, append naturally.
 - Return the COMPLETE interaction.
+- Return ONLY valid JSON.
 - No markdown.
 - No explanation.
 """
@@ -52,10 +53,42 @@ Rules:
     content = re.sub(r"```json|```", "", content).strip()
 
     try:
-        state["interaction"] = json.loads(content)
 
-    except Exception:
-        # If parsing fails, keep the previous interaction
-        pass
+        updated = json.loads(content)
+
+        merged = interaction.copy()
+
+        lower = user_message.lower()
+
+        remove_words = [
+            "remove",
+            "delete",
+            "clear",
+            "erase",
+        ]
+
+        removing = any(word in lower for word in remove_words)
+
+        for key, value in updated.items():
+
+            # Skip nulls
+            if value is None:
+                continue
+
+            # Ignore accidental empty strings unless user is removing data
+            if value == "" and not removing:
+                continue
+
+            merged[key] = value
+
+        state["interaction"] = merged
+
+    except Exception as e:
+
+        print("Edit Agent JSON Error:", e)
+        print(content)
+
+        # Preserve previous interaction
+        state["interaction"] = interaction
 
     return state
