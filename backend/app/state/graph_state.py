@@ -2,7 +2,12 @@ from typing import TypedDict
 
 
 class GraphState(TypedDict):
-    interaction: dict | str
+
+    message: str
+
+    tool: str
+
+    interaction: dict
 
     summary: str
 
