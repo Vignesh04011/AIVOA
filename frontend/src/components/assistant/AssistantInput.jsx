@@ -54,7 +54,13 @@ export default function AssistantInput({
         <Button
           disabled={loading}
           onClick={handleSend}
-          className="bg-blue-600 border-blue-600 text-white hover:bg-blue-700"
+          bg-gradient-to-r
+from-blue-600
+to-blue-700
+hover:from-blue-700
+hover:to-blue-800
+shadow-md
+hover:shadow-lg
         >
           {loading ? "Processing..." : "Send"}
         </Button>

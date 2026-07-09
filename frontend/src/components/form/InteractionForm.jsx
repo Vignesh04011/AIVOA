@@ -55,7 +55,15 @@ export default function InteractionForm({
 <div className="flex justify-end pt-4">
     <Button
     disabled={loading}
-    className="bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+    className="
+bg-emerald-600
+hover:bg-emerald-700
+text-white
+shadow-lg
+hover:shadow-xl
+transition-all
+duration-200
+"
     onClick={onSubmit}
 >
         {loading ? "Saving..." : "Log Interaction"}

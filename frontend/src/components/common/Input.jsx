@@ -9,7 +9,7 @@ export default function Input({
     <div className="flex flex-col gap-2">
 
       {label && (
-        <label className="text-sm font-medium text-slate-700">
+        <label className="text-sm font-semibold text-slate-700">
           {label}
         </label>
       )}
@@ -20,19 +20,24 @@ export default function Input({
         value={value}
         onChange={onChange}
         className="
-          h-10
+          h-11
           w-full
-          rounded-md
+          rounded-xl
           border
           border-slate-300
-          bg-white
-          px-3
+          bg-slate-50
+          px-4
           text-sm
+          text-slate-800
+          placeholder:text-slate-400
+          shadow-sm
           outline-none
-          transition
-          focus:border-blue-500
-          focus:ring-2
-          focus:ring-blue-200
+          transition-all
+          duration-200
+          focus:bg-white
+          focus:border-blue-600
+          focus:ring-4
+          focus:ring-blue-100
         "
       />
 
