@@ -56,7 +56,7 @@ export default function AssistantInput({
           onClick={handleSend}
           className="bg-blue-600 border-blue-600 text-white hover:bg-blue-700"
         >
-          {loading ? "Thinking..." : "Send"}
+          {loading ? "Processing..." : "Send"}
         </Button>
 
       </div>

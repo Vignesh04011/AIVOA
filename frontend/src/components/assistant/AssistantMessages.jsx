@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 export default function AssistantMessages({
 
     messages,
@@ -5,6 +7,15 @@ export default function AssistantMessages({
     loading,
 
 }) {
+    const bottomRef = useRef(null);
+
+useEffect(() => {
+
+    bottomRef.current?.scrollIntoView({
+        behavior: "smooth",
+    });
+
+}, [messages, loading]);
 
     return (
 
@@ -15,7 +26,7 @@ export default function AssistantMessages({
                 <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm">
 
                     <h3 className="font-semibold mb-2">
-                        👋 AI CRM Assistant
+                        🤖 Healthcare CRM Assistant
                     </h3>
 
                     <p className="mb-3">
@@ -38,6 +49,8 @@ export default function AssistantMessages({
 
                         <div>• Show all meetings with Dr. Smith.</div>
 
+                        <div>• Log this interaction.</div>
+
                     </div>
 
                 </div>
@@ -56,11 +69,11 @@ export default function AssistantMessages({
                 >
 
                     <div
-                        className={`max-w-[85%] rounded-xl p-3 text-sm whitespace-pre-wrap ${
-                            msg.role === "user"
-                                ? "bg-blue-600 text-white"
-                                : "bg-white border"
-                        }`}
+                        className={`max-w-[92%] rounded-xl p-3 text-sm whitespace-pre-wrap ${
+                         msg.role === "user"
+                         ? "bg-blue-600 text-white"
+                         : "bg-slate-50 border border-slate-200 shadow-sm"
+                    }`}
                     >
 
                         {msg.content}
@@ -73,20 +86,22 @@ export default function AssistantMessages({
 
             {loading && (
 
-                <div className="flex">
+    <div className="flex">
 
-                    <div className="rounded-xl border bg-white p-3">
+        <div className="rounded-xl border bg-slate-50 border-slate-200 shadow-sm p-3">
 
-                        🤖 Thinking...
+    🤖 Understanding your request...
 
-                    </div>
+</div>
 
-                </div>
+    </div>
 
-            )}
+)}
 
-        </div>
+<div ref={bottomRef} />
 
-    );
+</div>
+
+);
 
 }

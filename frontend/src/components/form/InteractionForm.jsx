@@ -11,7 +11,6 @@ import Button from "../common/Button";
 export default function InteractionForm({
     formData,
     setFormData,
-    setAiResponse,
     onSubmit,
     loading,
 }) {
@@ -52,12 +51,14 @@ export default function InteractionForm({
   setFormData={setFormData}
 />
 
+
 <div className="flex justify-end pt-4">
     <Button
-        className="bg-blue-600 text-white hover:bg-blue-700"
-        onClick={onSubmit}
-    >
-        {loading ? "Generating..." : "Log Interaction"}
+    disabled={loading}
+    className="bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+    onClick={onSubmit}
+>
+        {loading ? "Saving..." : "Log Interaction"}
     </Button>
 </div>
 

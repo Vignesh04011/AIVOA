@@ -30,11 +30,14 @@ export default function InteractionPage() {
 
     const [loading, setLoading] = useState(false);
 
+    // -------------------------
+    // AI Chat
+    // -------------------------
     const handleSendMessage = async (text) => {
 
         if (!text.trim()) return;
 
-        // Show user message
+        // Add user message
         setMessages(prev => [
 
             ...prev,
@@ -52,9 +55,11 @@ export default function InteractionPage() {
 
             const data = await chat(text, formData);
 
-            // Update form automatically
-            if (data.form_data &&
-                Object.keys(data.form_data).length > 0) {
+            // Autofill form after Extract/Edit
+            if (
+                data.form_data &&
+                Object.keys(data.form_data).length > 0
+            ) {
 
                 setFormData(data.form_data);
 
@@ -109,16 +114,18 @@ export default function InteractionPage() {
 `${index + 1}. ${item.hcp_name}
 
 Type : ${item.interaction_type}
-
 Date : ${item.interaction_date}
-
 Topic : ${item.topics_discussed}
-
 Sentiment : ${item.sentiment}
 
-\n`;
+`;
 
                 });
+
+            } else if (data.plan?.includes("search")) {
+
+                assistantReply +=
+                    "🔍 No matching interactions were found.";
 
             }
 
@@ -142,6 +149,21 @@ Sentiment : ${item.sentiment}
 
             console.error(err);
 
+            setMessages(prev => [
+
+                ...prev,
+
+                {
+
+                    role: "assistant",
+
+                    content:
+                        "❌ Sorry, I couldn't process your request. Please try again.",
+
+                },
+
+            ]);
+
         }
 
         finally {
@@ -152,13 +174,16 @@ Sentiment : ${item.sentiment}
 
     };
 
+    // -------------------------
+    // Save Interaction
+    // -------------------------
     const handleSubmit = async () => {
 
         try {
 
             setLoading(true);
 
-            await createInteraction(formData);
+            const response = await createInteraction(formData);
 
             setMessages(prev => [
 
@@ -169,7 +194,8 @@ Sentiment : ${item.sentiment}
                     role: "assistant",
 
                     content:
-                        "✅ Interaction logged successfully into the CRM.",
+                        response.ai_response?.message ??
+                        "✅ Interaction logged successfully.",
 
                 },
 
@@ -180,6 +206,21 @@ Sentiment : ${item.sentiment}
         catch (err) {
 
             console.error(err);
+
+            setMessages(prev => [
+
+                ...prev,
+
+                {
+
+                    role: "assistant",
+
+                    content:
+                        "❌ Failed to save the interaction.",
+
+                },
+
+            ]);
 
         }
 
