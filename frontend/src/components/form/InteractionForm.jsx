@@ -7,7 +7,11 @@ import SentimentSection from "./SentimentSection";
 import OutcomeSection from "./OutcomeSection";
 import FollowupSection from "./FollowupSection";
 
-export default function InteractionForm() {
+export default function InteractionForm({
+    formData,
+    setFormData,
+    setAiResponse,
+}) {
   return (
     <Card className="space-y-8">
 
@@ -15,17 +19,35 @@ export default function InteractionForm() {
         Interaction Details
       </h2>
 
-      <BasicInfo />
+      <BasicInfo
+  formData={formData}
+  setFormData={setFormData}
+/>
 
-      <DiscussionSection />
+      <DiscussionSection
+  formData={formData}
+  setFormData={setFormData}
+/>
 
-      <MaterialsSection />
+<MaterialsSection
+  formData={formData}
+  setFormData={setFormData}
+/>
 
-      <SentimentSection />
+<SentimentSection
+  formData={formData}
+  setFormData={setFormData}
+/>
 
-      <OutcomeSection />
+<OutcomeSection
+  formData={formData}
+  setFormData={setFormData}
+/>
 
-      <FollowupSection />
+<FollowupSection
+  formData={formData}
+  setFormData={setFormData}
+/>
 
     </Card>
   );

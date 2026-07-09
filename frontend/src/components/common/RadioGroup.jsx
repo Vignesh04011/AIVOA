@@ -1,21 +1,34 @@
-export default function RadioGroup() {
+export default function RadioGroup({
+  value,
+  onChange,
+}) {
+
+  const sentiments = [
+    "Positive",
+    "Neutral",
+    "Negative",
+  ];
+
   return (
     <div className="flex gap-6">
 
-      <label className="flex items-center gap-2 text-sm">
-        <input type="radio" name="sentiment" />
-        Positive
-      </label>
+      {sentiments.map((item) => (
+        <label
+          key={item}
+          className="flex items-center gap-2 text-sm"
+        >
+          <input
+            type="radio"
+            name="sentiment"
+            value={item}
+            checked={value === item}
+            onChange={(e) => onChange(e.target.value)}
+          />
 
-      <label className="flex items-center gap-2 text-sm">
-        <input type="radio" name="sentiment" />
-        Neutral
-      </label>
+          {item}
 
-      <label className="flex items-center gap-2 text-sm">
-        <input type="radio" name="sentiment" />
-        Negative
-      </label>
+        </label>
+      ))}
 
     </div>
   );

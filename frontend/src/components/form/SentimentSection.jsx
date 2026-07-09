@@ -1,6 +1,9 @@
 import RadioGroup from "../common/RadioGroup";
 
-export default function SentimentSection() {
+export default function SentimentSection({
+  formData,
+  setFormData,
+}) {
   return (
     <div className="space-y-3">
 
@@ -8,7 +11,15 @@ export default function SentimentSection() {
         Observed HCP Sentiment
       </h3>
 
-      <RadioGroup />
+      <RadioGroup
+  value={formData.sentiment}
+  onChange={(value) =>
+    setFormData({
+      ...formData,
+      sentiment: value,
+    })
+  }
+/>
 
     </div>
   );

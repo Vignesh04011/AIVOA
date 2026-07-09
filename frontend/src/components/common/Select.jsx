@@ -1,14 +1,19 @@
 export default function Select({
   label,
   options = [],
+  value = "",
+  onChange,
 }) {
   return (
     <div className="flex flex-col gap-2">
+
       <label className="text-sm font-medium text-slate-700">
         {label}
       </label>
 
       <select
+        value={value}
+        onChange={onChange}
         className="
           h-10
           w-full
@@ -26,11 +31,15 @@ export default function Select({
         "
       >
         {options.map((option) => (
-          <option key={option}>
+          <option
+            key={option}
+            value={option}
+          >
             {option}
           </option>
         ))}
       </select>
+
     </div>
   );
 }

@@ -2,16 +2,23 @@ export default function Input({
   label,
   placeholder = "",
   type = "text",
+  value = "",
+  onChange,
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-slate-700">
-        {label}
-      </label>
+
+      {label && (
+        <label className="text-sm font-medium text-slate-700">
+          {label}
+        </label>
+      )}
 
       <input
         type={type}
         placeholder={placeholder}
+        value={value}
+        onChange={onChange}
         className="
           h-10
           w-full
@@ -28,6 +35,7 @@ export default function Input({
           focus:ring-blue-200
         "
       />
+
     </div>
   );
 }

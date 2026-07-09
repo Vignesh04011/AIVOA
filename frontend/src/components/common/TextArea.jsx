@@ -2,16 +2,23 @@ export default function TextArea({
   label,
   placeholder = "",
   rows = 4,
+  value = "",
+  onChange,
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-slate-700">
-        {label}
-      </label>
+
+      {label && (
+        <label className="text-sm font-medium text-slate-700">
+          {label}
+        </label>
+      )}
 
       <textarea
         rows={rows}
         placeholder={placeholder}
+        value={value}
+        onChange={onChange}
         className="
           w-full
           rounded-md
@@ -28,6 +35,7 @@ export default function TextArea({
           focus:ring-blue-200
         "
       />
+
     </div>
   );
 }
