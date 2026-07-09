@@ -6,7 +6,7 @@ export default function AssistantMessages({
     if (loading) {
         return (
             <div className="flex-1 p-4">
-                🤖 Generating AI insights...
+                🤖 AI is thinking...
             </div>
         );
     }
@@ -15,11 +15,26 @@ export default function AssistantMessages({
         return (
             <div className="flex-1 overflow-y-auto py-4">
 
-                <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm text-slate-700">
+                <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm">
 
-                    👋 Hi! I can help summarize interactions,
-                    generate follow-up actions,
-                    and suggest next steps.
+                    👋 Hi! I'm your AI CRM Assistant.
+
+                    <br /><br />
+
+                    You can simply chat with me.
+
+                    <br /><br />
+
+                    Examples:
+
+                    <ul className="list-disc ml-5 mt-2 space-y-1">
+                        <li>I met Dr. Smith yesterday at 8 PM...</li>
+                        <li>Change the meeting time to 7 PM.</li>
+                        <li>Summarize the interaction.</li>
+                        <li>Generate medical insights.</li>
+                        <li>Recommend follow-up actions.</li>
+                        <li>Log this interaction.</li>
+                    </ul>
 
                 </div>
 
@@ -29,37 +44,69 @@ export default function AssistantMessages({
 
     return (
 
-        <div className="space-y-6 overflow-y-auto py-4">
+        <div className="space-y-5 overflow-y-auto py-4">
 
-            <div>
-                <h3 className="font-semibold">
-                    Summary
-                </h3>
+            {aiResponse.message && (
 
-                <p className="text-sm whitespace-pre-wrap">
-                    {aiResponse.summary}
-                </p>
-            </div>
+                <div className="rounded-lg bg-blue-50 p-3 border border-blue-200">
 
-            <div>
-                <h3 className="font-semibold">
-                    Medical Insights
-                </h3>
+                    <p className="text-sm whitespace-pre-wrap">
 
-                <p className="text-sm whitespace-pre-wrap">
-                    {aiResponse.medical_insights}
-                </p>
-            </div>
+                        🤖 {aiResponse.message}
 
-            <div>
-                <h3 className="font-semibold">
-                    Recommendations
-                </h3>
+                    </p>
 
-                <p className="text-sm whitespace-pre-wrap">
-                    {aiResponse.recommendations}
-                </p>
-            </div>
+                </div>
+
+            )}
+
+            {aiResponse.summary && (
+
+                <div>
+
+                    <h3 className="font-semibold">
+                        Summary
+                    </h3>
+
+                    <p className="text-sm whitespace-pre-wrap">
+                        {aiResponse.summary}
+                    </p>
+
+                </div>
+
+            )}
+
+            {aiResponse.medical_insights && (
+
+                <div>
+
+                    <h3 className="font-semibold">
+                        Medical Insights
+                    </h3>
+
+                    <p className="text-sm whitespace-pre-wrap">
+                        {aiResponse.medical_insights}
+                    </p>
+
+                </div>
+
+            )}
+
+            {aiResponse.recommendations && (
+
+                <div>
+
+                    <h3 className="font-semibold">
+                        Recommendations
+                    </h3>
+
+                    <p className="text-sm whitespace-pre-wrap">
+                        {aiResponse.recommendations}
+                    </p>
+
+                </div>
+
+            )}
 
         </div>
 

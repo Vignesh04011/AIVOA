@@ -20,11 +20,14 @@ export default function AssistantInput({
       />
 
       <Button
-        className="mt-3 bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
-        onClick={() => onAutoFill(text)}
-      >
-        ✨ Auto Fill Form
-      </Button>
+  className="mt-3 bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
+  onClick={() => {
+      onAutoFill(text);
+      setText("");
+  }}
+>
+    Send
+</Button>
 
     </div>
 

@@ -1,23 +1,25 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from app.graph.builder import build_graph
+from app.graph.builder import graph
 
 router = APIRouter()
 
-graph = build_graph()
+
+class ChatRequest(BaseModel):
+    message: str
 
 
-class ParseRequest(BaseModel):
-    text: str
-
-
-@router.post("/parse-interaction")
-def parse_interaction(request: ParseRequest):
+@router.post("/chat")
+def chat(request: ChatRequest):
 
     state = {
 
-        "interaction": request.text,
+        "message": request.message,
+
+        "tool": "",
+
+        "interaction": {},
 
         "summary": "",
 

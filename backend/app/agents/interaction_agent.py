@@ -5,56 +5,54 @@ import re
 
 def interaction_agent(state):
 
-    interaction = state["interaction"]
+    message = state["message"]
 
     prompt = f"""
 You are an AI Healthcare CRM assistant.
 
-Extract the interaction AND generate a short summary.
+Your ONLY job is to extract structured interaction information.
+
+DO NOT summarize.
+DO NOT generate recommendations.
+DO NOT generate medical insights.
 
 Today's date is 2026-07-09.
 
 Return interaction_date in YYYY-MM-DD format.
 
-Return interaction_time in 24-hour HH:MM:SS format.
+Return interaction_time in HH:MM:SS (24-hour).
 
-Example:
+Examples:
 20:00:00
 09:30:00
 
-For interaction_type use one of:
+interaction_type must be exactly one of:
+
 Meeting
 Call
 Email
 Conference
 
-IMPORTANT:
-Return ONLY valid JSON.
-Do not explain anything.
-Do not use markdown.
-Do not wrap the JSON in ```.
+If any field is unknown, return an empty string.
 
-Return exactly in this format:
+Return ONLY valid JSON.
 
 {{
-    "interaction": {{
-        "hcp_name": "",
-        "interaction_type": "",
-        "interaction_date": "",
-        "interaction_time": "",
-        "attendees": "",
-        "topics_discussed": "",
-        "materials_shared": "",
-        "sentiment": "",
-        "outcomes": "",
-        "follow_up_actions": ""
-    }},
-    "summary": ""
+    "hcp_name":"",
+    "interaction_type":"",
+    "interaction_date":"",
+    "interaction_time":"",
+    "attendees":"",
+    "topics_discussed":"",
+    "materials_shared":"",
+    "sentiment":"",
+    "outcomes":"",
+    "follow_up_actions":""
 }}
 
-User Input:
+User:
 
-{interaction}
+{message}
 """
 
     response = client.chat.completions.create(
@@ -68,11 +66,9 @@ User Input:
     )
 
     content = response.choices[0].message.content.strip()
+
     content = re.sub(r"```json|```", "", content).strip()
 
-    data = json.loads(content)
-
-    state["interaction"] = data["interaction"]
-    state["summary"] = data["summary"]
+    state["interaction"] = json.loads(content)
 
     return state

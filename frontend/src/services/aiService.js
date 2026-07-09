@@ -1,8 +1,9 @@
 import api from "../api/api";
 
-export async function parseInteraction(text) {
-  const response = await api.post("/parse-interaction", {
-    text,
+export async function chat(message) {
+
+  const response = await api.post("/chat", {
+    message,
   });
 
   return response.data;

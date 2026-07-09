@@ -3,12 +3,25 @@ from app.config.groq_client import client
 
 def recommendation_agent(state):
 
+    interaction = state["interaction"]
+
     prompt = f"""
-Based on this interaction summary,
+You are an AI Healthcare CRM assistant.
 
-{state['summary']}
+Below is an HCP interaction.
 
-Generate follow-up recommendations.
+Interaction:
+
+{interaction}
+
+Generate professional follow-up recommendations for the sales representative.
+
+Rules:
+
+- Suggest practical next actions.
+- Do NOT summarize the interaction.
+- Do NOT generate medical insights.
+- Return only the recommendations.
 """
 
     response = client.chat.completions.create(
@@ -21,6 +34,8 @@ Generate follow-up recommendations.
         ],
     )
 
-    state["recommendations"] = response.choices[0].message.content
+    state["recommendations"] = (
+        response.choices[0].message.content.strip()
+    )
 
     return state

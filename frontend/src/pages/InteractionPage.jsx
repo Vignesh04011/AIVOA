@@ -6,7 +6,7 @@ import MainLayout from "../components/layout/MainLayout";
 import InteractionForm from "../components/form/InteractionForm";
 import AssistantPanel from "../components/assistant/AssistantPanel";
 import { createInteraction } from "../services/interactionService";
-import { parseInteraction } from "../services/aiService";
+import { chat } from "../services/aiService";
 
 export default function InteractionPage() {
 
@@ -31,15 +31,58 @@ const handleAutoFill = async (text) => {
 
     setLoading(true);
 
-    const data = await parseInteraction(text);
+    const data = await chat(text);
 
-    setFormData(data.form_data);
+    switch (data.tool) {
 
-    setAiResponse({
-      summary: data.summary,
-      medical_insights: data.medical_insights,
-      recommendations: data.recommendations,
-    });
+      case "extract":
+      case "edit":
+
+        setFormData(data.form_data);
+
+        break;
+
+      case "summary":
+
+        setAiResponse(prev => ({
+          ...prev,
+          summary: data.summary,
+          message: data.message,
+        }));
+
+        break;
+
+      case "medical":
+
+        setAiResponse(prev => ({
+          ...prev,
+          medical_insights: data.medical_insights,
+          message: data.message,
+        }));
+
+        break;
+
+      case "recommendation":
+
+        setAiResponse(prev => ({
+          ...prev,
+          recommendations: data.recommendations,
+          message: data.message,
+        }));
+
+        break;
+
+      case "save":
+
+        alert(data.message);
+
+        break;
+
+      default:
+
+        setAiResponse(data);
+
+    }
 
   } catch (err) {
 
