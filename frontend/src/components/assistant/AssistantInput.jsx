@@ -2,32 +2,64 @@ import { useState } from "react";
 import Button from "../common/Button";
 
 export default function AssistantInput({
-  onAutoFill,
+  onSend,
+  loading,
 }) {
 
   const [text, setText] = useState("");
 
+  const handleSend = () => {
+
+    if (!text.trim()) return;
+
+    onSend(text);
+
+    setText("");
+
+  };
+
   return (
 
-    <div className="border-t border-slate-200 pt-4">
+    <div className="border-t border-slate-200 p-4">
 
       <textarea
-        rows={5}
+        rows={4}
         value={text}
+        placeholder={`Try asking...
+
+• I met Dr. Smith yesterday around 8 PM.
+• Change the meeting time to 7 PM.
+• Remove brochure.
+• Summarize this interaction.
+• Give medical insights.
+• Recommend next steps.
+• Show all meetings with Dr. Smith.`}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Describe your interaction with the HCP..."
-        className="w-full rounded-md border p-3 text-sm"
+        onKeyDown={(e) => {
+
+          if (e.key === "Enter" && !e.shiftKey) {
+
+            e.preventDefault();
+
+            handleSend();
+
+          }
+
+        }}
+        className="w-full rounded-lg border border-slate-300 p-3 text-sm resize-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
       />
 
-      <Button
-  className="mt-3 bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
-  onClick={() => {
-      onAutoFill(text);
-      setText("");
-  }}
->
-    Send
-</Button>
+      <div className="mt-3 flex justify-end">
+
+        <Button
+          disabled={loading}
+          onClick={handleSend}
+          className="bg-blue-600 border-blue-600 text-white hover:bg-blue-700"
+        >
+          {loading ? "Thinking..." : "Send"}
+        </Button>
+
+      </div>
 
     </div>
 

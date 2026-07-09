@@ -1,7 +1,7 @@
 from app.config.groq_client import client
 
 response = client.chat.completions.create(
-    model="gemma2-9b-it",
+    model="llama-3.3-70b-versatile",
     messages=[
         {
             "role": "user",

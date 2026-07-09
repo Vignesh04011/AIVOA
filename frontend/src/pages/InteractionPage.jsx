@@ -5,154 +5,238 @@ import MainLayout from "../components/layout/MainLayout";
 
 import InteractionForm from "../components/form/InteractionForm";
 import AssistantPanel from "../components/assistant/AssistantPanel";
+
 import { createInteraction } from "../services/interactionService";
 import { chat } from "../services/aiService";
 
 export default function InteractionPage() {
 
-  const [formData, setFormData] = useState({
-    hcp_name: "",
-    interaction_type: "",
-    interaction_date: "",
-    interaction_time: "",
-    attendees: "",
-    topics_discussed: "",
-    materials_shared: "",
-    sentiment: "",
-    outcomes: "",
-    follow_up_actions: "",
-  });
+    const [formData, setFormData] = useState({
 
-  const [loading, setLoading] = useState(false);
+        hcp_name: "",
+        interaction_type: "",
+        interaction_date: "",
+        interaction_time: "",
+        attendees: "",
+        topics_discussed: "",
+        materials_shared: "",
+        sentiment: "",
+        outcomes: "",
+        follow_up_actions: "",
 
-const handleAutoFill = async (text) => {
+    });
 
-  try {
+    const [messages, setMessages] = useState([]);
 
-    setLoading(true);
+    const [loading, setLoading] = useState(false);
 
-    const data = await chat(text);
+    const handleSendMessage = async (text) => {
 
-    switch (data.tool) {
+        if (!text.trim()) return;
 
-      case "extract":
-      case "edit":
+        // Show user message
+        setMessages(prev => [
 
-        setFormData(data.form_data);
+            ...prev,
 
-        break;
+            {
+                role: "user",
+                content: text,
+            },
 
-      case "summary":
+        ]);
 
-        setAiResponse(prev => ({
-          ...prev,
-          summary: data.summary,
-          message: data.message,
-        }));
+        try {
 
-        break;
+            setLoading(true);
 
-      case "medical":
+            const data = await chat(text, formData);
 
-        setAiResponse(prev => ({
-          ...prev,
-          medical_insights: data.medical_insights,
-          message: data.message,
-        }));
+            // Update form automatically
+            if (data.form_data &&
+                Object.keys(data.form_data).length > 0) {
 
-        break;
+                setFormData(data.form_data);
 
-      case "recommendation":
+            }
 
-        setAiResponse(prev => ({
-          ...prev,
-          recommendations: data.recommendations,
-          message: data.message,
-        }));
+            let assistantReply = "";
 
-        break;
+            if (data.message) {
 
-      case "save":
+                assistantReply += data.message + "\n\n";
 
-        alert(data.message);
+            }
 
-        break;
+            if (data.summary) {
 
-      default:
+                assistantReply +=
+                    "📄 SUMMARY\n\n" +
+                    data.summary +
+                    "\n\n";
 
-        setAiResponse(data);
+            }
 
-    }
+            if (data.medical_insights) {
 
-  } catch (err) {
+                assistantReply +=
+                    "🩺 MEDICAL INSIGHTS\n\n" +
+                    data.medical_insights +
+                    "\n\n";
 
-    console.error(err);
+            }
 
-  } finally {
+            if (data.recommendations) {
 
-    setLoading(false);
+                assistantReply +=
+                    "✅ RECOMMENDATIONS\n\n" +
+                    data.recommendations +
+                    "\n\n";
 
-  }
+            }
 
-};
+            if (
+                data.search_results &&
+                data.search_results.length > 0
+            ) {
 
-const handleSubmit = async () => {
-  console.log("FORM DATA:", formData);
+                assistantReply +=
+                    "🔍 SEARCH RESULTS\n\n";
 
-  try {
-    setLoading(true);
+                data.search_results.forEach((item, index) => {
 
-    const response = await createInteraction(formData);
+                    assistantReply +=
+`${index + 1}. ${item.hcp_name}
 
-    console.log(response);
+Type : ${item.interaction_type}
 
-    setAiResponse(response.ai_response);
+Date : ${item.interaction_date}
 
-    alert("Interaction Logged Successfully!");
+Topic : ${item.topics_discussed}
 
-  } catch (err) {
+Sentiment : ${item.sentiment}
 
-    console.log("ERROR RESPONSE:", err.response);
+\n`;
 
-    console.log("ERROR DATA:", err.response?.data);
+                });
 
-    console.error(err);
+            }
 
-  } finally {
+            setMessages(prev => [
 
-    setLoading(false);
+                ...prev,
 
-  }
-};
+                {
 
-  const [aiResponse, setAiResponse] = useState(null);
+                    role: "assistant",
 
-  return (
-    <main className="min-h-screen bg-[#F5F7FB]">
-      <div className="mx-auto max-w-7xl px-8 py-8">
+                    content: assistantReply.trim(),
 
-        <Header />
+                },
 
-        <MainLayout
-          left={
-            <InteractionForm
-    formData={formData}
-    setFormData={setFormData}
-    setAiResponse={setAiResponse}
-    onSubmit={handleSubmit}
-    loading={loading}
-/>
-          }
-          right={
-            <AssistantPanel
-    aiResponse={aiResponse}
-    loading={loading}
-    onAutoFill={handleAutoFill}
-/>
-          }
-        />
+            ]);
 
-      </div>
-    </main>
-  );
+        }
+
+        catch (err) {
+
+            console.error(err);
+
+        }
+
+        finally {
+
+            setLoading(false);
+
+        }
+
+    };
+
+    const handleSubmit = async () => {
+
+        try {
+
+            setLoading(true);
+
+            await createInteraction(formData);
+
+            setMessages(prev => [
+
+                ...prev,
+
+                {
+
+                    role: "assistant",
+
+                    content:
+                        "✅ Interaction logged successfully into the CRM.",
+
+                },
+
+            ]);
+
+        }
+
+        catch (err) {
+
+            console.error(err);
+
+        }
+
+        finally {
+
+            setLoading(false);
+
+        }
+
+    };
+
+    return (
+
+        <main className="min-h-screen bg-[#F5F7FB]">
+
+            <div className="mx-auto max-w-7xl px-8 py-8">
+
+                <Header />
+
+                <MainLayout
+
+                    left={
+
+                        <InteractionForm
+
+                            formData={formData}
+
+                            setFormData={setFormData}
+
+                            onSubmit={handleSubmit}
+
+                            loading={loading}
+
+                        />
+
+                    }
+
+                    right={
+
+                        <AssistantPanel
+
+                            messages={messages}
+
+                            loading={loading}
+
+                            onSend={handleSendMessage}
+
+                        />
+
+                    }
+
+                />
+
+            </div>
+
+        </main>
+
+    );
+
 }

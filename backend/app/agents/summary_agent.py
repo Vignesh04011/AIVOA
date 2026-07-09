@@ -3,7 +3,7 @@ from app.config.groq_client import client
 
 def summary_agent(state):
 
-    interaction = state["interaction"]
+    interaction = state.get("interaction", {})
 
     prompt = f"""
 You are an AI Healthcare CRM assistant.
@@ -14,11 +14,16 @@ Interaction:
 
 {interaction}
 
-Return only the summary.
+Rules:
+
+- Only summarize the interaction.
+- Do not generate recommendations.
+- Do not generate medical insights.
+- Return only the summary.
 """
 
     response = client.chat.completions.create(
-        model="gemma2-9b-it",
+        model="llama-3.3-70b-versatile",
         messages=[
             {
                 "role": "user",

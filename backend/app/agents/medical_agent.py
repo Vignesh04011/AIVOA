@@ -3,27 +3,33 @@ from app.config.groq_client import client
 
 def medical_agent(state):
 
-    interaction = state["interaction"]
+    interaction = state.get("interaction", {})
 
     prompt = f"""
-You are a medical affairs AI assistant.
+You are a Medical Affairs AI Assistant.
 
-Below is a healthcare professional interaction.
+Analyze ONLY this interaction.
 
 Interaction:
 
 {interaction}
 
-Provide concise medical insights based ONLY on the interaction.
+Provide:
 
-Do not recommend follow-up actions.
-Do not summarize the interaction.
+- Medical insights
+- Therapy discussion observations
+- Scientific discussion observations
+- Educational opportunities
+
+Do NOT summarize.
+
+Do NOT recommend follow-up actions.
 
 Return only the medical insights.
 """
 
     response = client.chat.completions.create(
-        model="gemma2-9b-it",
+        model="llama-3.3-70b-versatile",
         messages=[
             {
                 "role": "user",

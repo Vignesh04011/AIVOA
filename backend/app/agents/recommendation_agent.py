@@ -3,29 +3,26 @@ from app.config.groq_client import client
 
 def recommendation_agent(state):
 
-    interaction = state["interaction"]
+    interaction = state.get("interaction", {})
 
     prompt = f"""
-You are an AI Healthcare CRM assistant.
-
-Below is an HCP interaction.
+You are an AI CRM Assistant.
 
 Interaction:
 
 {interaction}
 
-Generate professional follow-up recommendations for the sales representative.
+Generate practical follow-up actions.
 
 Rules:
 
-- Suggest practical next actions.
-- Do NOT summarize the interaction.
-- Do NOT generate medical insights.
-- Return only the recommendations.
+- Only recommendations.
+- No summary.
+- No medical insights.
 """
 
     response = client.chat.completions.create(
-        model="gemma2-9b-it",
+        model="llama-3.3-70b-versatile",
         messages=[
             {
                 "role": "user",

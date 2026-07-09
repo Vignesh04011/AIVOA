@@ -1,5 +1,5 @@
 from app.agents.interaction_agent import interaction_agent
-from app.agents.supervisor import supervisor
+from backend.app.agents.supervisor_agent import supervisor
 from app.agents.medical_agent import medical_agent
 from app.agents.recommendation_agent import recommendation_agent
 from app.agents.formatter_agent import formatter_agent

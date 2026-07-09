@@ -5,43 +5,57 @@ import re
 
 def edit_agent(state):
 
-    interaction = state["interaction"]
-    command = state["message"]
+    interaction = state.get("interaction", {})
+    user_message = state["message"]
 
     prompt = f"""
-You are an AI CRM assistant.
+You are an AI CRM Assistant.
 
-Current interaction:
+The user is editing an already extracted Healthcare Professional interaction.
 
-{interaction}
+Current Interaction
 
-User wants to edit it:
+{json.dumps(interaction, indent=2)}
 
-{command}
+User Request
 
-Update ONLY the requested fields.
+{user_message}
 
-Return ONLY valid JSON.
+Rules:
 
-Do not explain.
-
-Return the complete updated interaction.
+- Understand natural language.
+- Modify ONLY the requested fields.
+- Preserve every other field exactly.
+- Never remove unrelated data.
+- If the user says remove/delete, replace that field with an empty string.
+- If the user changes time/date, update only that field.
+- If the user changes doctor name, update only hcp_name.
+- If the user adds another discussion topic, append it naturally.
+- Return ONLY valid JSON.
+- Return the COMPLETE interaction.
+- No markdown.
+- No explanation.
 """
 
     response = client.chat.completions.create(
-        model="gemma2-9b-it",
+        model="llama-3.3-70b-versatile",
         messages=[
             {
                 "role": "user",
                 "content": prompt,
             }
         ],
+        temperature=0,
     )
 
     content = response.choices[0].message.content.strip()
-
     content = re.sub(r"```json|```", "", content).strip()
 
-    state["interaction"] = json.loads(content)
+    try:
+        state["interaction"] = json.loads(content)
+
+    except Exception:
+        # If parsing fails, keep the previous interaction
+        pass
 
     return state

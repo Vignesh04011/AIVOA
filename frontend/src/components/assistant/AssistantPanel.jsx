@@ -5,24 +5,39 @@ import AssistantMessages from "./AssistantMessages";
 import AssistantInput from "./AssistantInput";
 
 export default function AssistantPanel({
-  aiResponse,
-  loading,
-  onAutoFill,
+
+    messages,
+
+    loading,
+
+    onSend,
+
 }) {
-  return (
-    <Card className="flex h-190 flex-col">
 
-      <AssistantHeader />
+    return (
 
-      <AssistantMessages
-        aiResponse={aiResponse}
-        loading={loading}
-      />
+        <Card className="flex h-[750px] flex-col">
 
-      <AssistantInput
-        onAutoFill={onAutoFill}
-      />
+            <AssistantHeader />
 
-    </Card>
-  );
+            <AssistantMessages
+
+                messages={messages}
+
+                loading={loading}
+
+            />
+
+            <AssistantInput
+
+                loading={loading}
+
+                onSend={onSend}
+
+            />
+
+        </Card>
+
+    );
+
 }

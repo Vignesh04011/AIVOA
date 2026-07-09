@@ -56,7 +56,7 @@ User:
 """
 
     response = client.chat.completions.create(
-        model="gemma2-9b-it",
+        model="llama-3.3-70b-versatile",
         messages=[
             {
                 "role": "user",
@@ -66,9 +66,25 @@ User:
     )
 
     content = response.choices[0].message.content.strip()
-
     content = re.sub(r"```json|```", "", content).strip()
 
-    state["interaction"] = json.loads(content)
+    try:
+
+        state["interaction"] = json.loads(content)
+
+    except Exception:
+
+        state["interaction"] = {
+            "hcp_name": "",
+            "interaction_type": "",
+            "interaction_date": "",
+            "interaction_time": "",
+            "attendees": "",
+            "topics_discussed": "",
+            "materials_shared": "",
+            "sentiment": "",
+            "outcomes": "",
+            "follow_up_actions": "",
+        }
 
     return state
