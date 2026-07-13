@@ -16,7 +16,7 @@ export default function AssistantPanel({
 
     return (
 
-        <Card className="flex h-[750px] flex-col">
+        <Card className="flex h-187.5 flex-col">
 
             <AssistantHeader />
 
